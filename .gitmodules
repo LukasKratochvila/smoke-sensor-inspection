@@ -1,3 +1,6 @@
 [submodule "RosNodes/yolo_ros"]
 	path = RosNodes/yolo_ros
 	url = https://github.com/mgonzs13/yolo_ros.git
+[submodule "RosNodes/camera_ros"]
+	path = RosNodes/camera_ros
+	url = https://github.com/christianrauch/camera_ros
