@@ -116,6 +116,7 @@ def evaluate(model, data_loader, device, args):
     #coco_evaluator.print_f1_confidence()
     #coco_evaluator.plot_pr_curve(args.resume, args.data_path, args.mode)
     #coco_evaluator.plot_roc_curve(args.resume, args.data_path, args.mode)
-
+    
+    value = coco_evaluator.summarize()
     torch.set_num_threads(n_threads)
-    return coco_evaluator
+    return value

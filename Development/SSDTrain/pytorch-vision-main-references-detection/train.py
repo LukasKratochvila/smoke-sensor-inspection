@@ -246,6 +246,7 @@ def main(args):
     model = torchvision.models.get_model(
         args.model, weights=args.weights, weights_backbone=args.weights_backbone, num_classes=num_classes, **kwargs
     )
+    print(model)
     model.to(device)
     if args.distributed and args.sync_bn:
         model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
@@ -321,10 +322,17 @@ def main(args):
                 checkpoint["scaler"] = scaler.state_dict()
             if epoch % 30 == 0:
                 utils.save_on_master(checkpoint, os.path.join(args.output_dir, f"model_{epoch}.pth"))
-                utils.save_on_master(checkpoint, os.path.join(args.output_dir, "checkpoint.pth"))
-
+            utils.save_on_master(checkpoint, os.path.join(args.output_dir, "checkpoint.pth"))
+            
         # evaluate after every epoch
-        evaluate(model, data_loader_test, device=device)
+        error = evaluate(model, data_loader_test, device=device)
+        if epoch == 0:
+            best_error = error
+        #print(coco_eval.eval_imgs)
+        if error < best_error:
+            best_error = error
+            utils.save_on_master(checkpoint, os.path.join(args.output_dir, f"model_best.pth"))
+            print(f"Saved model as best after {epoch} epoch")
 
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
