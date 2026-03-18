@@ -68,9 +68,9 @@ def main(args):
     print(f"Best model at: {max_step} step with {max_prec}[-] precision")
 
     if args.save:
-        ax.figure.savefig('training_curve_{}_{}_{}'.format(modelName, fileName, datasetName[:-1]), bbox_inches='tight', pad_inches=0.1)
-        ax2.figure.savefig('ap_val_curve_{}_{}_{}'.format(modelName, fileName, datasetName[:-1]), bbox_inches='tight', pad_inches=0.1)
-        with open(os.path.join("model_select.csv"), "w") as f:
+        ax.figure.savefig(os.path.join(os.path.dirname(args.file),'training_curve_{}_{}_{}'.format(modelName, fileName, datasetName[:-1])), bbox_inches='tight', pad_inches=0.1)
+        ax2.figure.savefig(os.path.join(os.path.dirname(args.file),'ap_val_curve_{}_{}_{}'.format(modelName, fileName, datasetName[:-1])), bbox_inches='tight', pad_inches=0.1)
+        with open(os.path.join(os.path.dirname(args.file),"model_select.csv"), "w") as f:
             f.write("type, step, precision\n")
             f.write(f"best, {max_step}, {max_prec}\n")
     else:
